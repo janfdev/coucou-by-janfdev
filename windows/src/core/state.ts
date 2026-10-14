@@ -121,9 +121,34 @@ export const DEFAULT_SETTINGS: Settings = {
 
 type Listener = () => void;
 
+export type HatKind = "none" | "wizard" | "beanie" | "crown";
+export type GlassesKind = "none" | "shades" | "nerd" | "monocle";
+
+export interface MochiAccessories {
+  hat: HatKind;
+  glasses: GlassesKind;
+}
+
 class AppState {
   mode: IslandMode = "hidden";
   view: IslandViewName = "overview";
+
+  accessories: MochiAccessories = {
+    hat: (localStorage.getItem("coucou_accessory_hat") as HatKind) || "none",
+    glasses: (localStorage.getItem("coucou_accessory_glasses") as GlassesKind) || "none",
+  };
+
+  setHat(hat: HatKind) {
+    this.accessories.hat = hat;
+    try { localStorage.setItem("coucou_accessory_hat", hat); } catch {}
+    this.notify();
+  }
+
+  setGlasses(glasses: GlassesKind) {
+    this.accessories.glasses = glasses;
+    try { localStorage.setItem("coucou_accessory_glasses", glasses); } catch {}
+    this.notify();
+  }
 
   tasks: AgentTask[] = [];
   focusId: string | null = null;

@@ -5,7 +5,7 @@
 import { h, svg, clear, dot } from "./dom";
 import { ICONS } from "./icons";
 import { Ticker } from "./ticker";
-import { State, type AgentTask } from "../core/state";
+import { State, type AgentTask, type HatKind, type GlassesKind } from "../core/state";
 import { Sound } from "../core/sound";
 import { Bridge } from "../core/bridge";
 import { washRGBA, type IslandViewName, type Wash } from "../core/layout";
@@ -82,6 +82,7 @@ function stack(padLeft: number, padRight: number, ...children: Node[]): HTMLElem
 export function buildHeader(actions: ViewActions): ViewHost {
   const tabHome = h("button", { class: "tab", title: "Overview", onclick: () => go("overview") }, svg(ICONS.house, 13));
   const tabChat = h("button", { class: "tab", title: "Ask", onclick: () => go("prompt") }, svg(ICONS.bubble, 13));
+  const tabAcc = h("button", { class: "tab", title: "Accessories", onclick: () => go("accessories") }, svg(ICONS.sparkle, 13));
   const tabDrop = h("button", { class: "tab", title: "Drop", onclick: () => go("upload") }, svg(ICONS.plus, 13));
 
   const minBtn = h("button", { title: "Minimize", onclick: () => { Sound.thock(); actions.collapse(); } }, svg(ICONS.chevronUp, 14));
@@ -127,7 +128,7 @@ export function buildHeader(actions: ViewActions): ViewHost {
   const el = h(
     "div",
     { id: "header" },
-    h("div", { class: "tabs" }, tabHome, tabChat, tabDrop),
+    h("div", { class: "tabs" }, tabHome, tabChat, tabAcc, tabDrop),
     h("div", { class: "header-center" }, brand, hud),
     h("div", { class: "header-actions" }, minBtn, gearBtn, soundBtn),
   );
@@ -138,6 +139,7 @@ export function buildHeader(actions: ViewActions): ViewHost {
       const v = State.view;
       tabHome.classList.toggle("on", v === "overview" || v === "empty");
       tabChat.classList.toggle("on", v === "prompt");
+      tabAcc.classList.toggle("on", v === "accessories");
       tabDrop.classList.toggle("on", v === "upload");
       gearBtn.classList.toggle("on", v === "settings");
       clear(gearBtn);
@@ -442,6 +444,84 @@ function buildNote(): ViewHost {
 
 // ── In-island settings ────────────────────────────────────────────────────────
 
+function buildAccessories(_actions: ViewActions): ViewHost {
+  const hatOptions: { id: HatKind; label: string }[] = [
+    { id: "none", label: "None" },
+    { id: "wizard", label: "Wizard" },
+    { id: "crown", label: "Crown" },
+    { id: "beanie", label: "Beanie" },
+  ];
+
+  const glassesOptions: { id: GlassesKind; label: string }[] = [
+    { id: "none", label: "None" },
+    { id: "shades", label: "Shades" },
+    { id: "nerd", label: "Nerd" },
+    { id: "monocle", label: "Monocle" },
+  ];
+
+  const hatBtns = hatOptions.map((opt) =>
+    h("button", {
+      class: "btn secondary",
+      text: opt.label,
+      onclick: () => {
+        Sound.thock();
+        State.setHat(opt.id);
+      },
+    }),
+  );
+
+  const glassesBtns = glassesOptions.map((opt) =>
+    h("button", {
+      class: "btn secondary",
+      text: opt.label,
+      onclick: () => {
+        Sound.thock();
+        State.setGlasses(opt.id);
+      },
+    }),
+  );
+
+  const rows = h(
+    "div",
+    { class: "settings-rows" },
+    h(
+      "div",
+      { class: "settings-row", style: "justify-content:space-between" },
+      h("span", { style: "font-weight:600;font-size:12px;color:#cbd5e1", text: "Topi (Hat)" }),
+      h("div", { class: "seg" }, ...hatBtns),
+    ),
+    h(
+      "div",
+      { class: "settings-row", style: "justify-content:space-between" },
+      h("span", { style: "font-weight:600;font-size:12px;color:#cbd5e1", text: "Kacamata (Glasses)" }),
+      h("div", { class: "seg" }, ...glassesBtns),
+    ),
+  );
+
+  const el = h(
+    "div",
+    { class: "view" },
+    card(null, h("div", { class: "stack", style: "padding:16px 16px 16px 96px" }, rows)),
+  );
+
+  return {
+    el,
+    sync() {
+      const curHat = State.accessories.hat;
+      hatOptions.forEach((opt, idx) => {
+        hatBtns[idx].classList.toggle("primary", curHat === opt.id);
+        hatBtns[idx].classList.toggle("secondary", curHat !== opt.id);
+      });
+
+      const curGlasses = State.accessories.glasses;
+      glassesOptions.forEach((opt, idx) => {
+        glassesBtns[idx].classList.toggle("primary", curGlasses === opt.id);
+        glassesBtns[idx].classList.toggle("secondary", curGlasses !== opt.id);
+      });
+    },
+  };
+}
+
 function buildSettings(actions: ViewActions): ViewHost {
   const soundSwitch = h("button", { class: "switch", onclick: () => actions.toggleSound() });
   const volume = h("input", {
@@ -531,6 +611,7 @@ export function buildViews(
   map.set("finished", buildFinished(actions));
   map.set("confused", buildConfused());
   map.set("note", buildNote());
+  map.set("accessories", buildAccessories(actions));
   map.set("settings", buildSettings(actions));
   map.set("prompt", buildPrompt(onChatHeightChange, actions));
   map.set("upload", buildUpload());

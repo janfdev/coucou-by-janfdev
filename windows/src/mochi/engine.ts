@@ -10,6 +10,8 @@ import type { BotEmoteName, BotStateName } from "../core/layout";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
+import type { HatKind, GlassesKind } from "../core/state";
+
 export type EyeShape =
   | "pill" | "wide" | "dot" | "line" | "flat" | "happy" | "closed"
   | "spiral" | "heart" | "star" | "tired" | "wink" | "cup";
@@ -164,8 +166,14 @@ const FONT = `system-ui, "Segoe UI Variable Text", "Segoe UI", sans-serif`;
 
 // ── Engine ────────────────────────────────────────────────────────────────────
 
+export interface MochiAccessories {
+  hat: HatKind;
+  glasses: GlassesKind;
+}
+
 export class BotEngine {
   isMini = false;
+  accessories: MochiAccessories = { hat: "none", glasses: "none" };
   /** Solid body colour for mini bots / integration pills (null = Mochi gradient). */
   bodyColor: RGB | null = null;
 
@@ -676,6 +684,7 @@ export class BotEngine {
 
     if (this.morph < 0.25 && !this.isMini) {
       this.drawHeadphones(x, R, rx, ry);
+      this.drawAccessories(x, R, rx, ry);
     }
 
     x.restore();
@@ -989,6 +998,157 @@ export class BotEngine {
       }
     }
     x.restore();
+  }
+
+  private drawAccessories(x: CanvasRenderingContext2D, R: number, rx: number, ry: number) {
+    if (!this.accessories) return;
+    const { hat, glasses } = this.accessories;
+
+    // ── Glasses ──
+    if (glasses && glasses !== "none") {
+      x.save();
+      const gy = ry * 0.04;
+      const gSpacing = rx * 0.44;
+      const rEye = R * 0.22;
+
+      if (glasses === "shades") {
+        for (const dir of [-1, 1]) {
+          const gx = dir * gSpacing;
+          x.beginPath();
+          x.roundRect(gx - rEye * 1.05, gy - rEye * 0.7, rEye * 2.1, rEye * 1.4, 5);
+          x.fillStyle = "#0f172a";
+          x.fill();
+          x.strokeStyle = "#38bdf8";
+          x.lineWidth = Math.max(1, R * 0.04);
+          x.stroke();
+          x.beginPath();
+          x.moveTo(gx - rEye * 0.6, gy - rEye * 0.4);
+          x.lineTo(gx - rEye * 0.2, gy + rEye * 0.4);
+          x.strokeStyle = "rgba(255, 255, 255, 0.45)";
+          x.lineWidth = 1.5;
+          x.stroke();
+        }
+        x.beginPath();
+        x.moveTo(-gSpacing + rEye * 1.05, gy - rEye * 0.2);
+        x.lineTo(gSpacing - rEye * 1.05, gy - rEye * 0.2);
+        x.strokeStyle = "#0f172a";
+        x.lineWidth = Math.max(2, R * 0.06);
+        x.stroke();
+      } else if (glasses === "nerd") {
+        for (const dir of [-1, 1]) {
+          const gx = dir * gSpacing;
+          x.beginPath();
+          x.arc(gx, gy, rEye * 0.95, 0, Math.PI * 2);
+          x.fillStyle = "rgba(56, 189, 248, 0.12)";
+          x.fill();
+          x.strokeStyle = "#e2e8f0";
+          x.lineWidth = Math.max(1.8, R * 0.05);
+          x.stroke();
+        }
+        x.beginPath();
+        x.arc(0, gy - rEye * 0.2, rEye * 0.45, Math.PI, 0);
+        x.strokeStyle = "#e2e8f0";
+        x.lineWidth = Math.max(1.5, R * 0.05);
+        x.stroke();
+      } else if (glasses === "monocle") {
+        const gx = gSpacing;
+        x.beginPath();
+        x.arc(gx, gy, rEye * 1.05, 0, Math.PI * 2);
+        x.fillStyle = "rgba(234, 179, 8, 0.15)";
+        x.fill();
+        x.strokeStyle = "#eab308";
+        x.lineWidth = Math.max(2, R * 0.06);
+        x.stroke();
+        x.beginPath();
+        x.moveTo(gx + rEye * 1.05, gy);
+        x.quadraticCurveTo(gx + rEye * 1.5, gy + ry * 0.5, gx + rEye * 0.8, gy + ry * 0.8);
+        x.strokeStyle = "#eab308";
+        x.lineWidth = 1.5;
+        x.stroke();
+      }
+      x.restore();
+    }
+
+    // ── Hat ──
+    if (hat && hat !== "none") {
+      x.save();
+      const topY = -ry * 0.82;
+
+      if (hat === "wizard") {
+        x.beginPath();
+        x.ellipse(0, topY + R * 0.08, rx * 0.9, R * 0.22, 0, 0, Math.PI * 2);
+        x.fillStyle = "#4338ca";
+        x.fill();
+        x.strokeStyle = "#a5b4fc";
+        x.lineWidth = 1.5;
+        x.stroke();
+
+        x.beginPath();
+        x.moveTo(-rx * 0.65, topY + R * 0.05);
+        x.quadraticCurveTo(-rx * 0.1, topY - R * 0.6, R * 0.25, topY - R * 1.25);
+        x.quadraticCurveTo(rx * 0.05, topY - R * 0.5, rx * 0.65, topY + R * 0.05);
+        x.closePath();
+        x.fillStyle = "#4f46e5";
+        x.fill();
+        x.strokeStyle = "#818cf8";
+        x.lineWidth = 1.5;
+        x.stroke();
+
+        x.beginPath();
+        x.arc(R * 0.25, topY - R * 1.25, R * 0.1, 0, Math.PI * 2);
+        x.fillStyle = "#facc15";
+        x.shadowColor = "#facc15";
+        x.shadowBlur = 6;
+        x.fill();
+        x.shadowBlur = 0;
+      } else if (hat === "crown") {
+        const cw = rx * 0.72;
+        const cyBase = topY + R * 0.04;
+        const ch = R * 0.6;
+        x.beginPath();
+        x.moveTo(-cw, cyBase);
+        x.lineTo(-cw, cyBase - ch * 0.8);
+        x.lineTo(-cw * 0.5, cyBase - ch * 0.4);
+        x.lineTo(0, cyBase - ch);
+        x.lineTo(cw * 0.5, cyBase - ch * 0.4);
+        x.lineTo(cw, cyBase - ch * 0.8);
+        x.lineTo(cw, cyBase);
+        x.closePath();
+        x.fillStyle = "#eab308";
+        x.fill();
+        x.strokeStyle = "#fef08a";
+        x.lineWidth = 1.5;
+        x.stroke();
+
+        for (const [jx, jy] of [[-cw, cyBase - ch * 0.8], [0, cyBase - ch], [cw, cyBase - ch * 0.8]]) {
+          x.beginPath();
+          x.arc(jx, jy, R * 0.065, 0, Math.PI * 2);
+          x.fillStyle = "#ef4444";
+          x.fill();
+        }
+      } else if (hat === "beanie") {
+        const bw = rx * 0.82;
+        const byBase = topY + R * 0.12;
+        x.beginPath();
+        x.ellipse(0, byBase, bw, R * 0.22, 0, 0, Math.PI * 2);
+        x.fillStyle = "#0284c7";
+        x.fill();
+
+        x.beginPath();
+        x.ellipse(0, byBase - R * 0.2, bw * 0.92, R * 0.45, 0, Math.PI, 0);
+        x.fillStyle = "#0369a1";
+        x.fill();
+        x.strokeStyle = "#38bdf8";
+        x.lineWidth = 1.5;
+        x.stroke();
+
+        x.beginPath();
+        x.arc(0, byBase - R * 0.65, R * 0.14, 0, Math.PI * 2);
+        x.fillStyle = "#f8fafc";
+        x.fill();
+      }
+      x.restore();
+    }
   }
 
   /** Hands sit behind the body — drawn before it, in world coordinates. */

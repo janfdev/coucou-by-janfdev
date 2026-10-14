@@ -421,6 +421,52 @@ fn get_system_stats() -> SystemStats {
         }
     }
 
+    #[cfg(windows)]
+    {
+        use windows::Win32::System::SystemInformation::{GlobalMemoryStatusEx, MEMORYSTATUSEX};
+        use windows::Win32::System::Threading::GetSystemTimes;
+        use windows::Win32::Foundation::FILETIME;
+
+        let mut mem = MEMORYSTATUSEX::default();
+        mem.dwLength = std::mem::size_of::<MEMORYSTATUSEX>() as u32;
+        if unsafe { GlobalMemoryStatusEx(&mut mem) }.is_ok() {
+            let total = mem.ullTotalPhys as f32 / (1024.0 * 1024.0 * 1024.0);
+            let avail = mem.ullAvailPhys as f32 / (1024.0 * 1024.0 * 1024.0);
+            ram_total_gb = (total * 10.0).round() / 10.0;
+            ram_used_gb = ((total - avail).max(0.0) * 10.0).round() / 10.0;
+        }
+
+        static PREV_TIMES: std::sync::Mutex<Option<(u64, u64, u64)>> = std::sync::Mutex::new(None);
+        fn to_u64(ft: FILETIME) -> u64 {
+            ((ft.dwHighDateTime as u64) << 32) | (ft.dwLowDateTime as u64)
+        }
+
+        let mut idle = FILETIME::default();
+        let mut kernel = FILETIME::default();
+        let mut user = FILETIME::default();
+
+        if unsafe { GetSystemTimes(Some(&mut idle), Some(&mut kernel), Some(&mut user)) }.is_ok() {
+            let i = to_u64(idle);
+            let k = to_u64(kernel);
+            let u = to_u64(user);
+
+            if let Ok(mut lock) = PREV_TIMES.lock() {
+                if let Some((prev_i, prev_k, prev_u)) = *lock {
+                    let d_idle = i.saturating_sub(prev_i);
+                    let d_kernel = k.saturating_sub(prev_k);
+                    let d_user = u.saturating_sub(prev_u);
+                    let d_total = d_kernel.saturating_add(d_user);
+
+                    if d_total > 0 {
+                        let active = d_total.saturating_sub(d_idle);
+                        cpu_percent = ((active as f32 / d_total as f32) * 100.0).clamp(0.0, 100.0).round();
+                    }
+                }
+                *lock = Some((i, k, u));
+            }
+        }
+    }
+
     SystemStats {
         cpu_percent,
         ram_used_gb,
