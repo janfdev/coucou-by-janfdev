@@ -2,7 +2,7 @@
 
 <img src="NotchBuddy/Assets.xcassets/AppIcon.appiconset/icon_256x256.png" width="96" alt="Coucou icon">
 
-# Coucou by janfdev · mas ojan edition 🎧✨
+# Coucou by janfdev 🎧✨
 ### `coucou-by-janfdev`
 
 **A customized, cyberpunk-themed desktop dynamic island AI companion & developer HUD for Windows, Linux, and macOS.**
