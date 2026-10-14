@@ -30,15 +30,24 @@ const UPLOAD_VIEWS: ReadonlySet<IslandViewName> = new Set(["upload", "uploading"
 /** Seconds between the drop and the moment the progress bar starts filling. */
 const PRE_PROGRESS = USC.T_PROG_START - USC.T_DROP;
 
-const DEV_QUOTES = [
-  "Halo mas ojan! ☕",
-  "Ngoding apa kita hari ini bray?",
-  "Jangan lupa git commit & push!",
-  "Kode rapi, hati tenang ✨",
-  "Coucou siap nemenin ngoding!",
-  "Bikin kopi dulu biar fokus ☕",
-  "Bug? Tenang, Mochi temenin!",
-  "Keep pushing, mas ojan! 🚀",
+interface DevQuote {
+  text: string;
+  emote: BotEmoteName;
+}
+
+const DEV_QUOTES: DevQuote[] = [
+  { text: "Halo mas ojan! ☕", emote: "happy" },
+  { text: "Keep pushing, mas ojan! 🚀", emote: "proud" },
+  { text: "Bug? Tenang, Mochi temenin!", emote: "wink" },
+  { text: "Kode rapi, hati tenang ✨", emote: "proud" },
+  { text: "Beres bray! Cek Telegram ya", emote: "love" },
+  { text: "Bikin kopi dulu biar fokus mas ojan ☕", emote: "yawn" },
+  { text: "Ngoding apa kita hari ini bray? 💻", emote: "wink" },
+  { text: "100% tests passed! Mantap mas ojan 🎯", emote: "proud" },
+  { text: "Jangan lupa git commit & push! 📦", emote: "surprised" },
+  { text: "Tidur teratur, ngoding terukur 🌙", emote: "yawn" },
+  { text: "Coucou siap nemenin ngoding! ⚡", emote: "happy" },
+  { text: "Gaspol tanpa bug hari ini mas ojan 🔥", emote: "love" },
 ];
 
 const modeOrder = (m: IslandMode) => (m === "hidden" ? 0 : m === "compact" ? 1 : 2);
@@ -967,11 +976,23 @@ export class Island {
     return chatPromptHeight(State.chatHistory.length);
   }
 
-  showQuote(text?: string) {
-    const msg = text ?? DEV_QUOTES[this.quoteIdx % DEV_QUOTES.length];
+  showQuote(text?: string, emote?: BotEmoteName) {
+    let msg: string;
+    let targetEmote: BotEmoteName;
+
+    if (text) {
+      msg = text;
+      targetEmote = emote ?? (text.includes("Beres") ? "love" : "happy");
+    } else {
+      const q = DEV_QUOTES[this.quoteIdx % DEV_QUOTES.length];
+      msg = q.text;
+      targetEmote = emote ?? q.emote;
+    }
+
     if (this.botBubble) {
       this.botBubble.textContent = msg;
       this.botBubble.classList.remove("hidden");
+      this.engine.triggerEmote(targetEmote, 2.8);
       if (this.bubbleTimer != null) window.clearTimeout(this.bubbleTimer);
       this.bubbleTimer = window.setTimeout(() => {
         this.botBubble?.classList.add("hidden");
