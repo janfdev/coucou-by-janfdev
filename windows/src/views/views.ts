@@ -95,9 +95,9 @@ export function buildHeader(actions: ViewActions): ViewHost {
 
   const brand = h(
     "div",
-    { class: "header-brand", title: "Coucou · masdevv edition" },
+    { class: "header-brand", title: "Coucou · mas ojan edition" },
     h("span", { class: "brand-name", text: "Coucou" }),
-    h("span", { class: "brand-tag", text: "masdevv" }),
+    h("span", { class: "brand-tag", text: "mas ojan" }),
   );
 
   const hudDot = h("i", { class: "hud-dot" });

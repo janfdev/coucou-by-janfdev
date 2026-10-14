@@ -31,14 +31,14 @@ const UPLOAD_VIEWS: ReadonlySet<IslandViewName> = new Set(["upload", "uploading"
 const PRE_PROGRESS = USC.T_PROG_START - USC.T_DROP;
 
 const DEV_QUOTES = [
-  "Halo masdevv! ☕",
+  "Halo mas ojan! ☕",
   "Ngoding apa kita hari ini bray?",
   "Jangan lupa git commit & push!",
   "Kode rapi, hati tenang ✨",
   "Coucou siap nemenin ngoding!",
   "Bikin kopi dulu biar fokus ☕",
   "Bug? Tenang, Mochi temenin!",
-  "Keep pushing, masdevv! 🚀",
+  "Keep pushing, mas ojan! 🚀",
 ];
 
 const modeOrder = (m: IslandMode) => (m === "hidden" ? 0 : m === "compact" ? 1 : 2);

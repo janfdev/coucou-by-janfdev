@@ -1,7 +1,7 @@
 name: coucou-hud
 version: 1.0.0
 description: Coucou Dynamic Island HUD integration for Hermes Agent
-author: Hermes x Masdevv
+author: Hermes x Mas Ojan
 provides_hooks:
   - pre_llm_call
   - post_llm_call

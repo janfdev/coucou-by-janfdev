@@ -81,7 +81,7 @@ async fn handle_client(app: AppHandle, mut stream: TcpStream) {
     }
 
     if method == "GET" {
-        let body = r#"{"status":"ok","coucou":"masdevv","relay":"hermes"}"#;
+        let body = r#"{"status":"ok","coucou":"mas ojan","relay":"hermes"}"#;
         let resp = format!(
             "HTTP/1.1 200 OK\r\nAccess-Control-Allow-Origin: *\r\nContent-Type: application/json\r\nContent-Length: {}\r\n\r\n{}",
             body.len(),
