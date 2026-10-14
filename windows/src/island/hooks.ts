@@ -8,7 +8,7 @@ import { Sound } from "../core/sound";
 import { State } from "../core/state";
 import type { Island } from "./island";
 
-const CLAUDE_ID = "integration_claude";
+const CLAUDE_ID = "agent_hermes";
 
 /** Clears the approval card if no decision was made before the hook gave up. */
 let pendingTimeout: number | null = null;
@@ -132,7 +132,7 @@ function clearSession() {
   if (!t) return;
   t.steps = [];
   t.stepIndex = 0;
-  t.name = "VS Code";
+  t.name = "Hermes";
   t.pillBadge = null;
 }
 
@@ -239,11 +239,10 @@ function handleHook(island: Island, payload: HookPayload) {
       surface("finished", true);
       island.showQuote(payload.message || "Beres bray! Cek Telegram ya", "love");
       window.setTimeout(() => {
-        if (isExternalAgent) {
-          State.removeTask(agentId);
-        } else {
-          State.updateTask(agentId, "idle");
-          State.setPillBadge(agentId, null);
+        State.updateTask(agentId, "idle");
+        State.setPillBadge(agentId, null);
+        if (State.view === "finished") {
+          island.setView(State.defaultView());
         }
       }, 5200);
       break;
@@ -260,11 +259,11 @@ function handleHook(island: Island, payload: HookPayload) {
       break;
 
     case "SessionEnd":
-      if (isExternalAgent) {
-        State.removeTask(agentId);
-      } else {
-        State.updateTask(agentId, "idle");
-        clearSession();
+      State.updateTask(agentId, "idle");
+      State.setPillBadge(agentId, null);
+      clearSession();
+      if (State.view === "finished") {
+        island.setView(State.defaultView());
       }
       break;
 

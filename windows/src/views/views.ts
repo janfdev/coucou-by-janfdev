@@ -207,10 +207,10 @@ function buildOverview(actions: ViewActions): ViewHost {
         mode = null;
       }
 
-      // VS Code with a live Claude Code session keeps the ticker; every other
-      // pill shows its own card, exactly like IntegrationCardView.
+      // Ticker active when agent session is active
       const sessionActive =
-        task?.id === "integration_claude" && (task.state !== "idle" || task.steps.length > 0);
+        (task?.source === "agent" || task?.id === "agent_hermes" || task?.source === "claudeCode") &&
+        (task.state !== "idle" || task.steps.length > 0);
 
       if (task && sessionActive) {
         if (mode !== "ticker") {
@@ -223,7 +223,7 @@ function buildOverview(actions: ViewActions): ViewHost {
         who.append(
           dot(task.color, 7),
           h("span", { class: "name", text: task.name }),
-          h("span", { class: "tool", text: task.source === "claudeCode" ? "Claude Code" : "n8n" }),
+          h("span", { class: "tool", text: task.name || "Hermes Agent" }),
         );
         if (task.steps.length > 1) {
           who.append(h("span", {
@@ -262,7 +262,7 @@ function buildOverview(actions: ViewActions): ViewHost {
 }
 
 function buildPill(task: AgentTask, actions: ViewActions): HTMLElement {
-  const label = task.id === "integration_claude" ? "VS Code" : task.name;
+  const label = task.name;
   const canvas = createMiniBot(task, 24);
   const pill = h(
     "div",
@@ -316,7 +316,7 @@ function buildEmpty(actions: ViewActions): ViewHost {
       h("div", { class: "sub", text: "Drop a file or window, or ask me anything." }),
     ),
     h("div", { class: "grow" }),
-    btn("Ask Claude", "primary", () => actions.setView("prompt")),
+    btn("Ask Hermes", "primary", () => actions.setView("prompt")),
   );
   return { el: h("div", { class: "view" }, card(null, body)), sync() {} };
 }
@@ -363,11 +363,11 @@ function buildQuestion(): ViewHost {
     el,
     sync() {
       clear(who);
-      who.append(agentWho(State.focusTask, "Claude Code is asking a question"));
       const task = State.focusTask;
-      title.textContent = task?.steps.at(-1) ?? "Claude needs an answer.";
+      who.append(agentWho(task, `${task?.name ?? "Hermes"} is asking a question`));
+      title.textContent = task?.steps.at(-1) ?? `${task?.name ?? "Hermes"} needs an answer.`;
       clear(row);
-      row.append(h("div", { class: "sub", text: "Answer in your terminal — Coucou can't reply for you yet." }));
+      row.append(h("div", { class: "sub", text: "Answer in Telegram or your terminal." }));
     },
   };
 }
@@ -376,11 +376,11 @@ function buildQuestion(): ViewHost {
 
 function buildError(actions: ViewActions): ViewHost {
   const who = h("div");
-  const title = h("div", { class: "title", text: "Workflow stopped." });
+  const title = h("div", { class: "title" });
   const detail = h("div", { class: "detail" });
   const row = h("div", { class: "actions" },
     btn("Retry", "primary", () => actions.setView(State.defaultView())),
-    btn("Open in n8n", "secondary", () => actions.openUrl("")),
+    btn("Dismiss", "secondary", () => actions.collapse()),
   );
   const el = h("div", { class: "view" }, card("red", stack(116, 16, who, title, detail, row)));
   return {
@@ -388,8 +388,8 @@ function buildError(actions: ViewActions): ViewHost {
     sync() {
       const task = State.focusTask;
       clear(who);
-      who.append(agentWho(task, task?.source === "n8n" ? "n8n" : "Claude Code"));
-      title.textContent = task?.source === "n8n" ? "Workflow stopped." : "Session stopped on an error.";
+      who.append(agentWho(task, task?.name ?? "Hermes Agent"));
+      title.textContent = task?.source === "n8n" ? "Workflow stopped." : `${task?.name ?? "Hermes"} session stopped on an error.`;
       detail.textContent = task?.steps.at(-1) ?? "No detail available.";
     },
   };
@@ -401,16 +401,16 @@ function buildFinished(actions: ViewActions): ViewHost {
   const who = h("div");
   const title = h("div", { class: "title" });
   const row = h("div", { class: "actions" },
-    btn("Open terminal", "primary", () => actions.openTerminal()),
-    btn("OK", "secondary", () => actions.collapse()),
+    btn("OK", "primary", () => actions.collapse()),
   );
   const el = h("div", { class: "view" }, card("green", stack(116, 16, who, title, row)));
   return {
     el,
     sync() {
       clear(who);
-      who.append(agentWho(State.focusTask, "Claude Code finished"));
-      title.textContent = State.focusTask?.steps.at(-1) ?? "Session finished";
+      const task = State.focusTask;
+      who.append(agentWho(task, `${task?.name ?? "Hermes"} finished`));
+      title.textContent = State.focusTask?.steps.at(-1) ?? "Task finished successfully";
     },
   };
 }
@@ -496,7 +496,7 @@ function buildSettings(actions: ViewActions): ViewHost {
       clear(claudeBadge);
       claudeBadge.append(
         dot(s.hooksInstalled ? "#22C55E" : "#F4505E", 6),
-        h("span", { text: "Claude Code" }),
+        h("span", { text: "Hermes Agent" }),
       );
       clear(apiBadge);
       apiBadge.append(dot("#F4505E", 6), h("span", { text: "API" }));
@@ -538,7 +538,7 @@ export function buildViews(
   map.set("choose", buildChoose(actions));
   // Not in the Windows v1: sending a file by email, window attach + web result.
   map.set("mail", buildPlaceholder("Sending by email isn't in this version.", ""));
-  map.set("searching", buildPlaceholder("Claude is searching…", ""));
+  map.set("searching", buildPlaceholder("Hermes is searching…", ""));
   map.set("result", buildPlaceholder("Result", ""));
   return map;
 }
