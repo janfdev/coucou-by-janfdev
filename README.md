@@ -21,19 +21,19 @@
 
 ---
 
-## 🚀 Apa itu Coucou · mas ojan edition?
+## 🚀 Apa itu Coucou by janfdev?
 
 Coucou adalah teman AI mungil (**Mochi**) yang hidup di bagian atas layar desktop kamu (Dynamic Island) untuk memantau sesi AI coding agents, notifikasi, dan status sistem secara real-time.
 
 Di edisi **`coucou-by-janfdev`**, tampilannya dirombak total agar ramah developer, estetik cyberpunk, dan langsung terintegrasi dengan ekosistem **Hermes Agent**:
 
-### ✨ Fitur Unggulan Edisi mas ojan:
+### ✨ Fitur Unggulan:
 
 - 🧠 **Native Hermes Agent Integration**: Dynamic Island terhubung langsung dengan Hermes Agent via HTTP Relay lokal port `4040` — memunculkan status thinking, working, step progress, dan selebrasi finished secara otomatis.
 - 🎧 **Cyberpunk Studio Headphones**: Mochi memakai headphone studio developer dengan aksen LED RGB neon menyala (cyan `#38bdf8` & violet `#a855f7`).
-- 🎩 **Mochi Accessories**: Kustomisasi Mochi dengan topi (Wizard hat, Royal Crown, Beanie) dan kacamata (Neon Shades, Nerd glasses, Steampunk Monocle) melalui tab aksesoris di header.
+- 🎩 **Mochi Accessories & Themes**: Kustomisasi Mochi dengan topi (Wizard hat, Royal Crown, Beanie), kacamata (Neon Shades, Nerd glasses, Steampunk Monocle), pilihan skin tema (Classic, Dark Matter, Cyberpunk, Matcha Pastel), serta pilihan switch Sound Pack mekanikal (Thock, Cherry Blue Clicky, Gateron Yellow Linear, 8-Bit Arcade) melalui tab aksesoris di header.
 - ⚡ **Native Real-Time Developer System HUD**: Monitor beban prosesor CPU & pemakaian RAM Windows secara presisi langsung di bilah header notch (`🟢 19% CPU · 3.6G RAM`).
-- 💬 **Interactive Speech Bubbles & Quotes**: Mochi menyapa kamu secara interaktif (*"Halo mas ojan!"*, *"Ngoding apa kita hari ini bro?"*, *"Jangan lupa git commit & push!"*) dan bereaksi lucu dengan ekspresi wajah dan partikel efek (love, star, blush).
+- 💬 **Interactive Speech Bubbles & Quotes**: Mochi menyapa kamu secara interaktif (*"Halo bro! ☕"*, *"Ngoding apa kita hari ini bro?"*, *"Jangan lupa git commit & push!"*) dan bereaksi lucu dengan ekspresi wajah dan partikel efek (love, star, blush).
 - 🛠️ **Custom Integrations System**: Bebas menambahkan shortcut aplikasi atau URL kustom (Telegram, GitHub, Discord, Web server lokal, dll.) langsung di pill island dengan tombol aksi cepat.
 - 🔊 **Mechanical Keyboard "Thock" Audio**: Efek suara tactile mechanical switch saat berpindah tab atau berinteraksi dengan Mochi, disintesis langsung via Web Audio API.
 - 🌌 **Tokyo Night & Neon Glassmorphism**: Tampilan pulau bernuansa gelap elegan dengan rim glow lembut dan padding presisi tanpa tabrakan teks.
@@ -84,10 +84,10 @@ Di versi ini, kamu **TIDAK PERLU** memasukkan API key pihak ketiga (seperti Anth
 - **Klik 1x / Poke**: Mochi akan tersenyum, berkedip, atau memberi tanda hati ❤️ sambil mengeluarkan quote developer santai.
 - **Klik 3x Cepat**: Mochi akan pusing (*slap reaction*) dan protes: *"Aduh pusing bro! 😵"*.
 - **Klik Tab & Tombol**: Menghasilkan feedback suara switch keyboard mechanical (*thock*).
-- **Tab Aksesoris (✨)**: Masuk ke panel aksesoris di sebelah icon chat untuk memilih topi atau kacamata favoritmu.
+- **Tab Aksesoris (✨)**: Masuk ke panel aksesoris di sebelah icon chat untuk memilih topi, kacamata, skin theme (Classic / Dark / Cyberpunk / Matcha), dan sound pack switch favoritmu.
 
 ### 4. ⚡ Memantau Status Sistem (Developer HUD)
-- Di sebelah kanan logo `Coucou [mas ojan]`, kamu bisa melihat indikator status CPU dan RAM secara live:
+- Di sebelah kanan logo `Coucou`, kamu bisa melihat indikator status CPU dan RAM secara live:
   - 🟢 Hijau: Beban kerja ringan.
   - 🟡 Kuning: Beban kerja sedang (> 40%).
   - 🔴 Merah: Beban kerja tinggi (> 70%).
@@ -259,7 +259,7 @@ Kamu bisa menambahkan shortcut kustom kamu sendiri di `~/.config/coucou/settings
 
 ## 👏 Credits & Attribution
 
-- Dimodifikasi dan diintegrasikan oleh **[@janfdev (mas ojan)](https://github.com/janfdev)**.
+- Dimodifikasi dan diintegrasikan oleh **[@janfdev](https://github.com/janfdev)**.
 - Base modding oleh **[@1dimas](https://github.com/1dimas)**.
 - Original project by **[Louis Raille (Louis-CFM)](https://github.com/Louis-CFM/coucou)**.
 - Licensed under the **MIT License**.

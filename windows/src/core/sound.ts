@@ -12,9 +12,12 @@ export const SOUND_NAMES = [
 
 export type SoundName = (typeof SOUND_NAMES)[number];
 
+import type { SoundPackKind } from "./state";
+
 class SoundEngine {
   enabled = true;
   volume = 0.12;
+  soundPack: SoundPackKind = "thock";
 
   private ctx: AudioContext | null = null;
   private master: GainNode | null = null;
@@ -101,6 +104,10 @@ class SoundEngine {
     src.start();
   }
 
+  setSoundPack(pack: SoundPackKind) {
+    this.soundPack = pack;
+  }
+
   thock() {
     if (!this.enabled || !this.ctx || !this.master) return;
     if (this.idleTimer != null) {
@@ -111,27 +118,75 @@ class SoundEngine {
 
     try {
       const t = this.ctx.currentTime;
-      const osc = this.ctx.createOscillator();
-      const gain = this.ctx.createGain();
-      const filter = this.ctx.createBiquadFilter();
+      const pack = this.soundPack;
 
-      osc.type = "sine";
-      osc.frequency.setValueAtTime(340, t);
-      osc.frequency.exponentialRampToValueAtTime(75, t + 0.045);
+      if (pack === "cherry_blue") {
+        // High clicky switch: dual burst
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(1400, t);
+        osc.frequency.exponentialRampToValueAtTime(350, t + 0.025);
+        gain.gain.setValueAtTime(0.7, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.035);
+        osc.connect(gain);
+        gain.connect(this.master);
+        osc.start(t);
+        osc.stop(t + 0.04);
+      } else if (pack === "gateron_yellow") {
+        // Creamy linear switch: mellow low-end thump
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        const filter = this.ctx.createBiquadFilter();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(220, t);
+        osc.frequency.exponentialRampToValueAtTime(55, t + 0.04);
+        filter.type = "lowpass";
+        filter.frequency.setValueAtTime(320, t);
+        gain.gain.setValueAtTime(0.85, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.05);
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.master);
+        osc.start(t);
+        osc.stop(t + 0.055);
+      } else if (pack === "arcade") {
+        // 8-bit retro gaming blip
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = "square";
+        osc.frequency.setValueAtTime(587.33, t); // D5
+        osc.frequency.setValueAtTime(880, t + 0.025); // A5
+        gain.gain.setValueAtTime(0.35, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+        osc.connect(gain);
+        gain.connect(this.master);
+        osc.start(t);
+        osc.stop(t + 0.065);
+      } else {
+        // Default deep tactile "thock"
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        const filter = this.ctx.createBiquadFilter();
 
-      filter.type = "bandpass";
-      filter.frequency.setValueAtTime(460, t);
-      filter.Q.setValueAtTime(3.0, t);
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(340, t);
+        osc.frequency.exponentialRampToValueAtTime(75, t + 0.045);
 
-      gain.gain.setValueAtTime(0.65, t);
-      gain.gain.exponentialRampToValueAtTime(0.001, t + 0.055);
+        filter.type = "bandpass";
+        filter.frequency.setValueAtTime(460, t);
+        filter.Q.setValueAtTime(3.0, t);
 
-      osc.connect(filter);
-      filter.connect(gain);
-      gain.connect(this.master);
+        gain.gain.setValueAtTime(0.65, t);
+        gain.gain.exponentialRampToValueAtTime(0.001, t + 0.055);
 
-      osc.start(t);
-      osc.stop(t + 0.06);
+        osc.connect(filter);
+        filter.connect(gain);
+        gain.connect(this.master);
+
+        osc.start(t);
+        osc.stop(t + 0.06);
+      }
     } catch {
       /* ignore audio context errors */
     }

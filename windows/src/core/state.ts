@@ -123,10 +123,14 @@ type Listener = () => void;
 
 export type HatKind = "none" | "wizard" | "beanie" | "crown";
 export type GlassesKind = "none" | "shades" | "nerd" | "monocle";
+export type ThemeKind = "classic" | "dark" | "cyberpunk" | "matcha";
+export type SoundPackKind = "thock" | "cherry_blue" | "gateron_yellow" | "arcade";
 
 export interface MochiAccessories {
   hat: HatKind;
   glasses: GlassesKind;
+  theme: ThemeKind;
+  soundPack: SoundPackKind;
 }
 
 class AppState {
@@ -136,6 +140,8 @@ class AppState {
   accessories: MochiAccessories = {
     hat: (localStorage.getItem("coucou_accessory_hat") as HatKind) || "none",
     glasses: (localStorage.getItem("coucou_accessory_glasses") as GlassesKind) || "none",
+    theme: (localStorage.getItem("coucou_theme") as ThemeKind) || "classic",
+    soundPack: (localStorage.getItem("coucou_sound_pack") as SoundPackKind) || "thock",
   };
 
   setHat(hat: HatKind) {
@@ -147,6 +153,18 @@ class AppState {
   setGlasses(glasses: GlassesKind) {
     this.accessories.glasses = glasses;
     try { localStorage.setItem("coucou_accessory_glasses", glasses); } catch {}
+    this.notify();
+  }
+
+  setTheme(theme: ThemeKind) {
+    this.accessories.theme = theme;
+    try { localStorage.setItem("coucou_theme", theme); } catch {}
+    this.notify();
+  }
+
+  setSoundPack(pack: SoundPackKind) {
+    this.accessories.soundPack = pack;
+    try { localStorage.setItem("coucou_sound_pack", pack); } catch {}
     this.notify();
   }
 

@@ -13,6 +13,7 @@ async function main() {
   if (!root) return;
 
   void Sound.preload();
+  Sound.setSoundPack(State.accessories.soundPack);
 
   const island = new Island(root);
 

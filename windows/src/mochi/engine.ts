@@ -10,7 +10,7 @@ import type { BotEmoteName, BotStateName } from "../core/layout";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
 
-import type { HatKind, GlassesKind } from "../core/state";
+import type { HatKind, GlassesKind, ThemeKind, SoundPackKind } from "../core/state";
 
 export type EyeShape =
   | "pill" | "wide" | "dot" | "line" | "flat" | "happy" | "closed"
@@ -169,11 +169,13 @@ const FONT = `system-ui, "Segoe UI Variable Text", "Segoe UI", sans-serif`;
 export interface MochiAccessories {
   hat: HatKind;
   glasses: GlassesKind;
+  theme: ThemeKind;
+  soundPack: SoundPackKind;
 }
 
 export class BotEngine {
   isMini = false;
-  accessories: MochiAccessories = { hat: "none", glasses: "none" };
+  accessories: MochiAccessories = { hat: "none", glasses: "none", theme: "classic", soundPack: "thock" };
   /** Solid body colour for mini bots / integration pills (null = Mochi gradient). */
   bodyColor: RGB | null = null;
 
@@ -730,9 +732,25 @@ export class BotEngine {
       x.fill(body);
       return;
     }
+
+    const theme = this.accessories?.theme ?? "classic";
+    let topColor = BASE_TOP;
+    let btmColor = BASE_BOTTOM;
+
+    if (theme === "dark") {
+      topColor = [0.18, 0.20, 0.26];
+      btmColor = [0.08, 0.09, 0.13];
+    } else if (theme === "cyberpunk") {
+      topColor = [0.05, 0.25, 0.22];
+      btmColor = [0.02, 0.12, 0.10];
+    } else if (theme === "matcha") {
+      topColor = [0.82, 0.90, 0.80];
+      btmColor = [0.62, 0.74, 0.60];
+    }
+
     const g = x.createLinearGradient(rx * 0.7, -ry * 0.85, -rx * 0.8, ry * 0.9);
-    g.addColorStop(0, rgba(BASE_TOP));
-    g.addColorStop(1, rgba(BASE_BOTTOM));
+    g.addColorStop(0, rgba(topColor));
+    g.addColorStop(1, rgba(btmColor));
     x.fillStyle = g;
     x.fill(body);
 
@@ -824,7 +842,7 @@ export class BotEngine {
 
     x.save();
     x.clip(body);
-    const ink = this.isMini ? MINI_INK : INK;
+    const ink = this.isMini ? MINI_INK : (this.accessories?.theme === "dark" || this.accessories?.theme === "cyberpunk" ? "#38bdf8" : INK);
     x.fillStyle = ink;
     x.strokeStyle = ink;
 

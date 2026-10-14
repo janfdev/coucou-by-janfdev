@@ -5,7 +5,7 @@
 import { h, svg, clear, dot } from "./dom";
 import { ICONS } from "./icons";
 import { Ticker } from "./ticker";
-import { State, type AgentTask, type HatKind, type GlassesKind } from "../core/state";
+import { State, type AgentTask, type HatKind, type GlassesKind, type ThemeKind, type SoundPackKind } from "../core/state";
 import { Sound } from "../core/sound";
 import { Bridge } from "../core/bridge";
 import { washRGBA, type IslandViewName, type Wash } from "../core/layout";
@@ -96,9 +96,9 @@ export function buildHeader(actions: ViewActions): ViewHost {
 
   const brand = h(
     "div",
-    { class: "header-brand", title: "Coucou · mas ojan edition" },
+    { class: "header-brand", title: "Coucou by janfdev" },
     h("span", { class: "brand-name", text: "Coucou" }),
-    h("span", { class: "brand-tag", text: "mas ojan" }),
+    h("span", { class: "brand-tag", text: "by janfdev" }),
   );
 
   const hudDot = h("i", { class: "hud-dot" });
@@ -459,6 +459,20 @@ function buildAccessories(_actions: ViewActions): ViewHost {
     { id: "monocle", label: "Monocle" },
   ];
 
+  const themeOptions: { id: ThemeKind; label: string }[] = [
+    { id: "classic", label: "Classic" },
+    { id: "dark", label: "Dark" },
+    { id: "cyberpunk", label: "Cyber" },
+    { id: "matcha", label: "Matcha" },
+  ];
+
+  const soundOptions: { id: SoundPackKind; label: string }[] = [
+    { id: "thock", label: "Thock" },
+    { id: "cherry_blue", label: "Clicky" },
+    { id: "gateron_yellow", label: "Linear" },
+    { id: "arcade", label: "8-Bit" },
+  ];
+
   const hatBtns = hatOptions.map((opt) =>
     h("button", {
       class: "btn secondary",
@@ -481,27 +495,62 @@ function buildAccessories(_actions: ViewActions): ViewHost {
     }),
   );
 
+  const themeBtns = themeOptions.map((opt) =>
+    h("button", {
+      class: "btn secondary",
+      text: opt.label,
+      onclick: () => {
+        Sound.thock();
+        State.setTheme(opt.id);
+      },
+    }),
+  );
+
+  const soundBtns = soundOptions.map((opt) =>
+    h("button", {
+      class: "btn secondary",
+      text: opt.label,
+      onclick: () => {
+        State.setSoundPack(opt.id);
+        Sound.setSoundPack(opt.id);
+        Sound.thock();
+      },
+    }),
+  );
+
   const rows = h(
     "div",
     { class: "settings-rows" },
     h(
       "div",
       { class: "settings-row", style: "justify-content:space-between" },
-      h("span", { style: "font-weight:600;font-size:12px;color:#cbd5e1", text: "Topi (Hat)" }),
+      h("span", { style: "font-weight:600;font-size:11px;color:#cbd5e1", text: "Topi (Hat)" }),
       h("div", { class: "seg" }, ...hatBtns),
     ),
     h(
       "div",
       { class: "settings-row", style: "justify-content:space-between" },
-      h("span", { style: "font-weight:600;font-size:12px;color:#cbd5e1", text: "Kacamata (Glasses)" }),
+      h("span", { style: "font-weight:600;font-size:11px;color:#cbd5e1", text: "Kacamata" }),
       h("div", { class: "seg" }, ...glassesBtns),
+    ),
+    h(
+      "div",
+      { class: "settings-row", style: "justify-content:space-between" },
+      h("span", { style: "font-weight:600;font-size:11px;color:#cbd5e1", text: "Skin Theme" }),
+      h("div", { class: "seg" }, ...themeBtns),
+    ),
+    h(
+      "div",
+      { class: "settings-row", style: "justify-content:space-between" },
+      h("span", { style: "font-weight:600;font-size:11px;color:#cbd5e1", text: "Sound Pack" }),
+      h("div", { class: "seg" }, ...soundBtns),
     ),
   );
 
   const el = h(
     "div",
     { class: "view" },
-    card(null, h("div", { class: "stack", style: "padding:16px 16px 16px 96px" }, rows)),
+    card(null, h("div", { class: "stack", style: "padding:12px 14px 12px 96px" }, rows)),
   );
 
   return {
@@ -517,6 +566,18 @@ function buildAccessories(_actions: ViewActions): ViewHost {
       glassesOptions.forEach((opt, idx) => {
         glassesBtns[idx].classList.toggle("primary", curGlasses === opt.id);
         glassesBtns[idx].classList.toggle("secondary", curGlasses !== opt.id);
+      });
+
+      const curTheme = State.accessories.theme;
+      themeOptions.forEach((opt, idx) => {
+        themeBtns[idx].classList.toggle("primary", curTheme === opt.id);
+        themeBtns[idx].classList.toggle("secondary", curTheme !== opt.id);
+      });
+
+      const curSound = State.accessories.soundPack;
+      soundOptions.forEach((opt, idx) => {
+        soundBtns[idx].classList.toggle("primary", curSound === opt.id);
+        soundBtns[idx].classList.toggle("secondary", curSound !== opt.id);
       });
     },
   };
