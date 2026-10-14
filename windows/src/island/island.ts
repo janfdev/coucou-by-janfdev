@@ -967,20 +967,16 @@ export class Island {
     return chatPromptHeight(State.chatHistory.length);
   }
 
-  private showQuote(text?: string) {
-    if (State.mode !== "expanded") {
-      this.botBubble?.classList.add("hidden");
-      return;
-    }
+  showQuote(text?: string) {
     const msg = text ?? DEV_QUOTES[this.quoteIdx % DEV_QUOTES.length];
     if (this.botBubble) {
       this.botBubble.textContent = msg;
       this.botBubble.classList.remove("hidden");
       if (this.bubbleTimer != null) window.clearTimeout(this.bubbleTimer);
       this.bubbleTimer = window.setTimeout(() => {
-        this.botBubble.classList.add("hidden");
+        this.botBubble?.classList.add("hidden");
         this.bubbleTimer = null;
-      }, 4500);
+      }, 5000);
     }
   }
 

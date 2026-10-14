@@ -236,6 +236,7 @@ function handleHook(island: Island, payload: HookPayload) {
       Sound.play("finish");
       if (focused) surface("finished", true);
       else State.setPillBadge(agentId, "finished");
+      island.showQuote(payload.message || "Beres bray! Cek Telegram ya");
       window.setTimeout(() => {
         if (isExternalAgent) {
           State.removeTask(agentId);
@@ -244,6 +245,11 @@ function handleHook(island: Island, payload: HookPayload) {
           State.setPillBadge(agentId, null);
         }
       }, 5200);
+      break;
+
+    case "Quote":
+    case "Speech":
+      if (payload.message) island.showQuote(payload.message);
       break;
 
     case "StopFailure":

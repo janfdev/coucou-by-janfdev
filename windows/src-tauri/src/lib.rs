@@ -3,6 +3,7 @@
 mod claude;
 mod files;
 mod hooks;
+mod http_relay;
 mod integrations;
 mod island;
 mod log;
@@ -506,6 +507,7 @@ pub fn run() {
             log::line(format!("--- Coucou {} started ---", env!("CARGO_PKG_VERSION")));
             hooks::ensure_hook_exe(&handle);
             pipe::start(handle.clone());
+            http_relay::start(handle.clone());
             integrations::start(handle.clone());
             Ok(())
         })
