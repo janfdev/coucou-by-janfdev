@@ -177,6 +177,7 @@ function handleHook(island: Island, payload: HookPayload) {
   const ensurePill = () => {
     if (isExternalAgent) {
       State.upsertExternalAgent(agentId, validAgent!, agentColor(validAgent!));
+      State.setFocus(agentId);
     } else {
       upsert(projectName, cwd);
     }
@@ -195,7 +196,8 @@ function handleHook(island: Island, payload: HookPayload) {
       // The field is `prompt`; reading `message` meant this step was always blank.
       const asked = payload.prompt ?? payload.message;
       if (asked) State.appendStep(agentId, asked.slice(0, 60));
-      surface("overview", false);
+      surface("overview", true);
+      island.showQuote("Mochi lagi mikir nih mas ojan... 💭", "wink");
       break;
     }
 
@@ -204,7 +206,7 @@ function handleHook(island: Island, payload: HookPayload) {
       State.updateTask(agentId, "working");
       const tool = payload.tool_name ?? "Tool";
       State.appendStep(agentId, stepLabel(tool, payload.tool_input ?? {}));
-      surface("overview", false);
+      surface("overview", true);
       break;
     }
 
@@ -234,8 +236,7 @@ function handleHook(island: Island, payload: HookPayload) {
       State.updateTask(agentId, "finished");
       if (payload.message) State.appendStep(agentId, payload.message.slice(0, 60));
       Sound.play("finish");
-      if (focused) surface("finished", true);
-      else State.setPillBadge(agentId, "finished");
+      surface("finished", true);
       island.showQuote(payload.message || "Beres bray! Cek Telegram ya", "love");
       window.setTimeout(() => {
         if (isExternalAgent) {
@@ -255,8 +256,7 @@ function handleHook(island: Island, payload: HookPayload) {
     case "StopFailure":
       State.updateTask(agentId, "error");
       Sound.play("error");
-      if (focused) surface("error", true);
-      else State.setPillBadge(agentId, "error");
+      surface("error", true);
       break;
 
     case "SessionEnd":
