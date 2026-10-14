@@ -2,17 +2,17 @@
 
 <img src="NotchBuddy/Assets.xcassets/AppIcon.appiconset/icon_256x256.png" width="96" alt="Coucou icon">
 
-# Coucou · masdevv edition 🎧✨
-### `coucou-by-1dimas`
+# Coucou by janfdev · mas ojan edition 🎧✨
+### `coucou-by-janfdev`
 
-**A customized, cyberpunk-themed desktop dynamic island AI companion & developer HUD for Linux (and Windows/macOS).**
+**A customized, cyberpunk-themed desktop dynamic island AI companion & developer HUD for Windows, Linux, and macOS.**
 
-*Forked & supercharged by [@1dimas (masdevv)](https://github.com/1dimas) from the original [Coucou by Louis-CFM](https://github.com/Louis-CFM/coucou).*
+*Supercharged by [@janfdev](https://github.com/janfdev) with Hermes Agent integration and Mochi reactive companion, based on the open-source Coucou project.*
 
-[![Linux](https://img.shields.io/badge/Linux-Hyprland%20%7C%20Wayland%20%7C%20X11-FCC624?logo=linux&logoColor=black)](https://github.com/1dimas/coucou-by-1dimas)
-[![Windows 10/11](https://img.shields.io/badge/Windows-Tauri%20Ready-0078D4?logo=windows&logoColor=white)](https://github.com/1dimas/coucou-by-1dimas)
+[![GitHub](https://img.shields.io/badge/GitHub-janfdev%2Fcoucou--by--janfdev-blue?logo=github)](https://github.com/janfdev/coucou-by-janfdev)
+[![Windows 10/11](https://img.shields.io/badge/Windows-Tauri%20Ready-0078D4?logo=windows&logoColor=white)](https://github.com/janfdev/coucou-by-janfdev)
 [![Tauri 2](https://img.shields.io/badge/Tauri-2-FFC131?logo=tauri&logoColor=black)](https://tauri.app)
-[![Google Antigravity](https://img.shields.io/badge/AI%20Engine-Google%20Antigravity%20(agy)-4285F4?logo=google&logoColor=white)](https://antigravity.google)
+[![Hermes Agent](https://img.shields.io/badge/AI%20Engine-Hermes%20Agent-38BDF8?logo=robot&logoColor=white)](https://hermes-agent.nousresearch.com)
 [![Rust](https://img.shields.io/badge/Rust-Backend-dea584?logo=rust&logoColor=black)](https://www.rust-lang.org/)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Frontend-3178c6?logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/license-MIT-green)](LICENSE)
@@ -21,22 +21,22 @@
 
 ---
 
-## 🚀 Apa itu Coucou · masdevv edition?
+## 🚀 Apa itu Coucou · mas ojan edition?
 
 Coucou adalah teman AI mungil (**Mochi**) yang hidup di bagian atas layar desktop kamu (Dynamic Island) untuk memantau sesi AI coding agents, notifikasi, dan status sistem secara real-time.
 
-Di edisi **`coucou-by-1dimas`**, tampilannya dirombak total agar ramah developer, estetik cyberpunk, dan langsung terintegrasi dengan ekosistem **Google Antigravity (`agy`)**:
+Di edisi **`coucou-by-janfdev`**, tampilannya dirombak total agar ramah developer, estetik cyberpunk, dan langsung terintegrasi dengan ekosistem **Hermes Agent**:
 
-### ✨ Fitur Unggulan Edisi masdevv:
+### ✨ Fitur Unggulan Edisi mas ojan:
 
-- 🧠 **Native Google Antigravity Integration**: AI Chat ditenagai langsung oleh mesin Google Antigravity (`agy` CLI) — **tanpa perlu repot beli API key berbayar manual!**
+- 🧠 **Native Hermes Agent Integration**: Dynamic Island terhubung langsung dengan Hermes Agent via HTTP Relay lokal port `4040` — memunculkan status thinking, working, step progress, dan selebrasi finished secara otomatis.
 - 🎧 **Cyberpunk Studio Headphones**: Mochi memakai headphone studio developer dengan aksen LED RGB neon menyala (cyan `#38bdf8` & violet `#a855f7`).
-- 💬 **Interactive Speech Bubbles & Quotes**: Mochi menyapa kamu secara interaktif (*"Halo masdevv!"*, *"Ngoding apa kita hari ini bray?"*, *"Jangan lupa git commit & push!"*) dan bereaksi lucu saat di-klik/poke.
+- 💬 **Interactive Speech Bubbles & Quotes**: Mochi menyapa kamu secara interaktif (*"Halo mas ojan!"*, *"Ngoding apa kita hari ini bray?"*, *"Jangan lupa git commit & push!"*) dan bereaksi lucu dengan ekspresi wajah dan partikel efek (love, star, blush).
 - ⚡ **Real-Time Developer System HUD**: Monitor CPU & RAM secara real-time langsung di bilah header notch (`🟢 19% CPU · 3.6G RAM`).
 - 🛠️ **Custom Integrations System**: Bebas menambahkan shortcut aplikasi atau URL kustom (Telegram, GitHub, Discord, Web server lokal, dll.) langsung di pill island dengan tombol aksi cepat.
 - 🔊 **Mechanical Keyboard "Thock" Audio**: Efek suara tactile mechanical switch saat berpindah tab atau berinteraksi dengan Mochi, disintesis langsung via Web Audio API.
 - 🌌 **Tokyo Night & Neon Glassmorphism**: Tampilan pulau bernuansa gelap elegan dengan rim glow lembut dan padding presisi tanpa tabrakan teks.
-- 🤖 **Multi-Agent & Tool Monitoring**: Integrasi langsung dengan Claude Code, Antigravity, VS Code, Cursor, n8n, Vercel, Resend, dll.
+- 🤖 **Hermes Agent & Multi-Tool Monitoring**: Integrasi langsung dengan Hermes Agent, VS Code, Cursor, n8n, Vercel, Resend, dll.
 
 ---
 
@@ -85,7 +85,7 @@ Di versi ini, kamu **TIDAK PERLU** memasukkan API key pihak ketiga (seperti Anth
 - **Klik Tab & Tombol**: Menghasilkan feedback suara switch keyboard mechanical (*thock*).
 
 ### 4. ⚡ Memantau Status Sistem (Developer HUD)
-- Di sebelah kanan logo `Coucou [masdevv]`, kamu bisa melihat indikator status CPU dan RAM secara live:
+- Di sebelah kanan logo `Coucou [mas ojan]`, kamu bisa melihat indikator status CPU dan RAM secara live:
   - 🟢 Hijau: Beban kerja ringan.
   - 🟡 Kuning: Beban kerja sedang (> 40%).
   - 🔴 Merah: Beban kerja tinggi (> 70%).
@@ -126,8 +126,8 @@ Pastikan dependensi berikut sudah terpasang di sistem kamu:
 
 ```bash
 # 1. Clone repository ini
-git clone https://github.com/1dimas/coucou-by-1dimas.git
-cd coucou-by-1dimas/windows
+git clone https://github.com/janfdev/coucou-by-janfdev.git
+cd coucou-by-janfdev/windows
 
 # 2. Install dependensi Node.js
 npm install
@@ -204,6 +204,7 @@ Kamu bisa menambahkan shortcut kustom kamu sendiri di `~/.config/coucou/settings
 
 ## 👏 Credits & Attribution
 
-- Dibuat dan dimodifikasi oleh **[@1dimas (masdevv)](https://github.com/1dimas)**.
+- Dimodifikasi dan diintegrasikan oleh **[@janfdev (mas ojan)](https://github.com/janfdev)**.
+- Base modding oleh **[@1dimas](https://github.com/1dimas)**.
 - Original project by **[Louis Raille (Louis-CFM)](https://github.com/Louis-CFM/coucou)**.
 - Licensed under the **MIT License**.

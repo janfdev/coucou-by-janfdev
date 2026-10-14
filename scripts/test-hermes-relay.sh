@@ -12,7 +12,7 @@ echo ""
 echo "[1/5] Checking Relay Server Health..."
 curl -s -f "http://127.0.0.1:4040/" || {
   echo "Error: Coucou HTTP relay is not running on port 4040."
-  echo "Make sure 'npm run tauri dev' is running in coucou-clone/windows."
+  echo "Make sure coucou binary or 'npm run tauri dev' is running in windows."
   exit 1
 }
 echo " -> OK (Relay is active!)"
@@ -22,7 +22,7 @@ echo ""
 echo "[2/5] Event: SessionStart (Hermes session initialized)"
 curl -s -X POST "$RELAY_URL" \
   -H "Content-Type: application/json" \
-  -d '{"hook_event_name": "SessionStart", "coucou_agent": "hermes", "cwd": "D:/KERJAAN/coucou-clone"}'
+  -d '{"hook_event_name": "SessionStart", "coucou_agent": "hermes", "cwd": "D:/KERJAAN/coucou-by-janfdev"}'
 echo " -> Sent SessionStart"
 sleep 1.5
 
