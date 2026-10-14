@@ -138,6 +138,67 @@ function clearSession() {
 
 export function registerHookHandlers(island: Island) {
   void onEvent<HookPayload>("hook", (payload) => handleHook(island, payload));
+  void onEvent<Record<string, any>>("hermes-event", (payload) => handleHermesEvent(island, payload));
+}
+
+function handleHermesEvent(island: Island, payload: Record<string, any>) {
+  if (State.paused) return;
+
+  const agentId = "agent_hermes";
+  State.upsertExternalAgent(agentId, "Hermes", "#38bdf8");
+
+  const eventType = String(payload.event_type || payload.type || "").toUpperCase();
+  const data = payload.data || {};
+  const message = data.message || data.prompt_preview || payload.message || "";
+  const tool = data.tool_name || payload.tool_name || "";
+
+  // Reveal island if collapsed
+  if (State.mode === "hidden") {
+    island.reveal();
+  }
+
+  switch (eventType) {
+    case "USER_PROMPT_SUBMIT":
+    case "PROMPT":
+      State.updateTask(agentId, "thinking");
+      State.appendStep(agentId, message ? `Telegram: ${message.slice(0, 45)}` : "Prompt diterima");
+      Sound.play("pop");
+      break;
+
+    case "REASONING":
+    case "THINKING":
+      State.updateTask(agentId, "thinking");
+      State.appendStep(agentId, "Menganalisis & merancang...");
+      break;
+
+    case "TOOL_USE":
+    case "PRE_TOOL_USE":
+      State.updateTask(agentId, "working");
+      State.appendStep(agentId, tool ? `Tool: ${tool}` : "Mengeksekusi tool...");
+      Sound.play("work");
+      break;
+
+    case "ERROR":
+    case "FAILED":
+      State.updateTask(agentId, "idle");
+      State.appendStep(agentId, "Terjadi kendala");
+      Sound.play("warn");
+      break;
+
+    case "COMPLETED":
+    case "STOP":
+    case "DONE":
+      State.updateTask(agentId, "idle");
+      State.appendStep(agentId, "Selesai! Laporan dikirim");
+      Sound.play("done");
+      break;
+
+    default:
+      if (message) {
+        State.appendStep(agentId, message.slice(0, 45));
+      }
+      break;
+  }
 }
 
 function handleHook(island: Island, payload: HookPayload) {
