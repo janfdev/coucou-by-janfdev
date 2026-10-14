@@ -726,8 +726,8 @@ export class BotEngine {
   }
 
   private drawBody(x: CanvasRenderingContext2D, body: Path2D, R: number, rx: number, ry: number) {
-    if (this.bodyColor) {
-      // Mini bots: flat solid fill — no gradient, no reflection, no highlight
+    if (this.bodyColor && this.isMini) {
+      // Mini bots / integration pills: flat solid fill
       x.fillStyle = rgba(this.bodyColor, 1);
       x.fill(body);
       return;
@@ -738,14 +738,14 @@ export class BotEngine {
     let btmColor = BASE_BOTTOM;
 
     if (theme === "dark") {
-      topColor = [0.18, 0.20, 0.26];
-      btmColor = [0.08, 0.09, 0.13];
+      topColor = [0.15, 0.17, 0.23];
+      btmColor = [0.05, 0.06, 0.09];
     } else if (theme === "cyberpunk") {
-      topColor = [0.05, 0.25, 0.22];
-      btmColor = [0.02, 0.12, 0.10];
+      topColor = [0.06, 0.35, 0.30];
+      btmColor = [0.01, 0.15, 0.12];
     } else if (theme === "matcha") {
-      topColor = [0.82, 0.90, 0.80];
-      btmColor = [0.62, 0.74, 0.60];
+      topColor = [0.75, 0.88, 0.70];
+      btmColor = [0.45, 0.65, 0.42];
     }
 
     const g = x.createLinearGradient(rx * 0.7, -ry * 0.85, -rx * 0.8, ry * 0.9);
@@ -771,7 +771,7 @@ export class BotEngine {
     x.fill(body);
 
     const hl = x.createRadialGradient(rx * 0.34, -ry * 0.46, 0, rx * 0.34, -ry * 0.46, R * 0.42);
-    hl.addColorStop(0, "rgba(255,255,255,0.55)");
+    hl.addColorStop(0, theme === "dark" || theme === "cyberpunk" ? "rgba(255,255,255,0.18)" : "rgba(255,255,255,0.55)");
     hl.addColorStop(1, "rgba(255,255,255,0)");
     x.fillStyle = hl;
     x.fill(body);
@@ -1225,8 +1225,20 @@ export class BotEngine {
         g.addColorStop(0, rgba(mix3(this.bodyColor, [1, 1, 1], 0.35)));
         g.addColorStop(1, rgba(this.bodyColor));
       } else {
-        g.addColorStop(0, rgba(BASE_TOP));
-        g.addColorStop(1, rgba(BASE_BOTTOM));
+        const theme = this.accessories?.theme ?? "classic";
+        if (theme === "dark") {
+          g.addColorStop(0, rgba([0.15, 0.17, 0.23]));
+          g.addColorStop(1, rgba([0.05, 0.06, 0.09]));
+        } else if (theme === "cyberpunk") {
+          g.addColorStop(0, rgba([0.06, 0.35, 0.30]));
+          g.addColorStop(1, rgba([0.01, 0.15, 0.12]));
+        } else if (theme === "matcha") {
+          g.addColorStop(0, rgba([0.75, 0.88, 0.70]));
+          g.addColorStop(1, rgba([0.45, 0.65, 0.42]));
+        } else {
+          g.addColorStop(0, rgba(BASE_TOP));
+          g.addColorStop(1, rgba(BASE_BOTTOM));
+        }
       }
       x.beginPath();
       x.ellipse(0, 0, hew, heh, 0, 0, Math.PI * 2);

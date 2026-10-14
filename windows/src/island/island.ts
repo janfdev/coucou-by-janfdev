@@ -863,7 +863,8 @@ export class Island {
     if (!ctx) return;
 
     const focus = State.focusTask;
-    this.engine.bodyColor = focus?.isIntegration ? hexToRGB(focus.color) : null;
+    // Main Mochi keeps its theme/gradient unless it is actively focusing an integration pill that isn't Hermes
+    this.engine.bodyColor = focus?.isIntegration && focus.id !== "agent_hermes" ? hexToRGB(focus.color) : null;
     this.engine.accessories = State.accessories;
     this.engine.particleOverhang = BOT_OVERHANG;
     this.engine.lookX = this.lookX();

@@ -520,28 +520,28 @@ function buildAccessories(_actions: ViewActions): ViewHost {
 
   const rows = h(
     "div",
-    { class: "settings-rows" },
+    { class: "settings-rows", style: "gap:10px" },
     h(
       "div",
-      { class: "settings-row", style: "justify-content:space-between" },
+      { class: "settings-row", style: "justify-content:space-between;align-items:center" },
       h("span", { style: "font-weight:600;font-size:11px;color:#cbd5e1", text: "Topi (Hat)" }),
       h("div", { class: "seg" }, ...hatBtns),
     ),
     h(
       "div",
-      { class: "settings-row", style: "justify-content:space-between" },
+      { class: "settings-row", style: "justify-content:space-between;align-items:center" },
       h("span", { style: "font-weight:600;font-size:11px;color:#cbd5e1", text: "Kacamata" }),
       h("div", { class: "seg" }, ...glassesBtns),
     ),
     h(
       "div",
-      { class: "settings-row", style: "justify-content:space-between" },
+      { class: "settings-row", style: "justify-content:space-between;align-items:center" },
       h("span", { style: "font-weight:600;font-size:11px;color:#cbd5e1", text: "Skin Theme" }),
       h("div", { class: "seg" }, ...themeBtns),
     ),
     h(
       "div",
-      { class: "settings-row", style: "justify-content:space-between" },
+      { class: "settings-row", style: "justify-content:space-between;align-items:center" },
       h("span", { style: "font-weight:600;font-size:11px;color:#cbd5e1", text: "Sound Pack" }),
       h("div", { class: "seg" }, ...soundBtns),
     ),
@@ -550,7 +550,7 @@ function buildAccessories(_actions: ViewActions): ViewHost {
   const el = h(
     "div",
     { class: "view" },
-    card(null, h("div", { class: "stack", style: "padding:12px 14px 12px 96px" }, rows)),
+    card(null, h("div", { class: "stack", style: "padding:10px 14px 10px 88px" }, rows)),
   );
 
   return {
