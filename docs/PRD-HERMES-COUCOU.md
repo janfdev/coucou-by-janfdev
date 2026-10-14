@@ -37,7 +37,7 @@ Berdasarkan hasil pengujian *design tree* (Grilling Round 1):
      * **ToolExecution (Coding / Bash):** Memakai headphone studio menyala, mengetik cepat, suara *thock* keyboard mekanikal.
      * **WebBrowsing / Research:** Mata berbentuk *star* / kacamata pemindai radar, radar scanner menyala.
      * **Error / Blocker:** Mochi berkeringat (*sweat drop*), mata cemas, aura merah berkedip.
-     * **Success / Done:** Mochi tersenyum lebar (*heart/happy eyes*), konfeti mikro, speech bubble *"Beres bray! Cek Telegram ya"*.
+     * **Success / Done:** Mochi tersenyum lebar (*heart/happy eyes*), konfeti mikro, speech bubble *"Beres bro! Cek Telegram ya"*.
 
 ---
 

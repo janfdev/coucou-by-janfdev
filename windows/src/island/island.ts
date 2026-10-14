@@ -40,9 +40,9 @@ const DEV_QUOTES: DevQuote[] = [
   { text: "Keep pushing, mas ojan! 🚀", emote: "proud" },
   { text: "Bug? Tenang, Mochi temenin!", emote: "wink" },
   { text: "Kode rapi, hati tenang ✨", emote: "proud" },
-  { text: "Beres bray! Cek Telegram ya", emote: "love" },
-  { text: "Bikin kopi dulu biar fokus mas ojan ☕", emote: "yawn" },
-  { text: "Ngoding apa kita hari ini bray? 💻", emote: "wink" },
+  { text: "Beres bro! Cek Telegram ya", emote: "love" },
+  { text: "Siap bantu apa lagi bro? 🚀", emote: "wink" },
+  { text: "Ngoding apa kita hari ini bro? 💻", emote: "wink" },
   { text: "100% tests passed! Mantap mas ojan 🎯", emote: "proud" },
   { text: "Jangan lupa git commit & push! 📦", emote: "surprised" },
   { text: "Tidur teratur, ngoding terukur 🌙", emote: "yawn" },
@@ -599,7 +599,7 @@ export class Island {
         if (this.botClickCount >= 3) {
           this.engine.slap();
           this.botClickCount = 0;
-          this.showQuote("Aduh pusing bray! 😵");
+          this.showQuote("Aduh pusing bro! 😵");
           Sound.play("annoyed");
         } else {
           const pokeEmotes: BotEmoteName[] = ["love", "happy", "wink"];

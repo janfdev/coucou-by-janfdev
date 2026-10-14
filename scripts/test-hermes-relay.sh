@@ -46,7 +46,7 @@ echo ""
 echo "[5/5] Event: Stop (Hermes finishes & sends completion notice)"
 curl -s -X POST "$RELAY_URL" \
   -H "Content-Type: application/json" \
-  -d '{"hook_event_name": "Stop", "coucou_agent": "hermes", "message": "Beres bray! Cek Telegram ya"}'
+  -d '{"hook_event_name": "Stop", "coucou_agent": "hermes", "message": "Beres bro! Cek Telegram ya"}'
 echo " -> Sent Stop (Mochi celebrates with heart eyes & speech bubble)"
 echo ""
 echo "=== Test Completed Successfully ==="

@@ -298,7 +298,7 @@ function handleHook(island: Island, payload: HookPayload) {
       if (payload.message) State.appendStep(agentId, payload.message.slice(0, 60));
       Sound.play("finish");
       surface("finished", true);
-      island.showQuote(payload.message || "Beres bray! Cek Telegram ya", "love");
+      island.showQuote(payload.message || "Beres bro! Cek Telegram ya", "love");
       window.setTimeout(() => {
         State.updateTask(agentId, "idle");
         State.setPillBadge(agentId, null);

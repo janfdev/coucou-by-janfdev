@@ -63,7 +63,7 @@ def on_post_llm_call(**kwargs: Any) -> None:
     _send_event_async({
         "hook_event_name": "Stop",
         "coucou_agent": "hermes",
-        "message": "Beres bray! Cek Telegram ya",
+        "message": "Beres bro! Cek Telegram ya",
     })
 
 

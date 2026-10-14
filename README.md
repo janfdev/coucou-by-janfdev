@@ -31,8 +31,9 @@ Di edisi **`coucou-by-janfdev`**, tampilannya dirombak total agar ramah develope
 
 - 🧠 **Native Hermes Agent Integration**: Dynamic Island terhubung langsung dengan Hermes Agent via HTTP Relay lokal port `4040` — memunculkan status thinking, working, step progress, dan selebrasi finished secara otomatis.
 - 🎧 **Cyberpunk Studio Headphones**: Mochi memakai headphone studio developer dengan aksen LED RGB neon menyala (cyan `#38bdf8` & violet `#a855f7`).
-- 💬 **Interactive Speech Bubbles & Quotes**: Mochi menyapa kamu secara interaktif (*"Halo mas ojan!"*, *"Ngoding apa kita hari ini bray?"*, *"Jangan lupa git commit & push!"*) dan bereaksi lucu dengan ekspresi wajah dan partikel efek (love, star, blush).
-- ⚡ **Real-Time Developer System HUD**: Monitor CPU & RAM secara real-time langsung di bilah header notch (`🟢 19% CPU · 3.6G RAM`).
+- 🎩 **Mochi Accessories**: Kustomisasi Mochi dengan topi (Wizard hat, Royal Crown, Beanie) dan kacamata (Neon Shades, Nerd glasses, Steampunk Monocle) melalui tab aksesoris di header.
+- ⚡ **Native Real-Time Developer System HUD**: Monitor beban prosesor CPU & pemakaian RAM Windows secara presisi langsung di bilah header notch (`🟢 19% CPU · 3.6G RAM`).
+- 💬 **Interactive Speech Bubbles & Quotes**: Mochi menyapa kamu secara interaktif (*"Halo mas ojan!"*, *"Ngoding apa kita hari ini bro?"*, *"Jangan lupa git commit & push!"*) dan bereaksi lucu dengan ekspresi wajah dan partikel efek (love, star, blush).
 - 🛠️ **Custom Integrations System**: Bebas menambahkan shortcut aplikasi atau URL kustom (Telegram, GitHub, Discord, Web server lokal, dll.) langsung di pill island dengan tombol aksi cepat.
 - 🔊 **Mechanical Keyboard "Thock" Audio**: Efek suara tactile mechanical switch saat berpindah tab atau berinteraksi dengan Mochi, disintesis langsung via Web Audio API.
 - 🌌 **Tokyo Night & Neon Glassmorphism**: Tampilan pulau bernuansa gelap elegan dengan rim glow lembut dan padding presisi tanpa tabrakan teks.
@@ -81,14 +82,40 @@ Di versi ini, kamu **TIDAK PERLU** memasukkan API key pihak ketiga (seperti Anth
 
 ### 3. 🖱️ Interaksi & Easter Egg Mochi
 - **Klik 1x / Poke**: Mochi akan tersenyum, berkedip, atau memberi tanda hati ❤️ sambil mengeluarkan quote developer santai.
-- **Klik 3x Cepat**: Mochi akan pusing (*slap reaction*) dan protes: *"Aduh pusing bray! 😵"*.
+- **Klik 3x Cepat**: Mochi akan pusing (*slap reaction*) dan protes: *"Aduh pusing bro! 😵"*.
 - **Klik Tab & Tombol**: Menghasilkan feedback suara switch keyboard mechanical (*thock*).
+- **Tab Aksesoris (✨)**: Masuk ke panel aksesoris di sebelah icon chat untuk memilih topi atau kacamata favoritmu.
 
 ### 4. ⚡ Memantau Status Sistem (Developer HUD)
 - Di sebelah kanan logo `Coucou [mas ojan]`, kamu bisa melihat indikator status CPU dan RAM secara live:
   - 🟢 Hijau: Beban kerja ringan.
   - 🟡 Kuning: Beban kerja sedang (> 40%).
   - 🔴 Merah: Beban kerja tinggi (> 70%).
+
+---
+
+## 🔌 Integrasi Hermes Agent (HTTP Relay Port 4040)
+
+Coucou dilengkapi dengan internal HTTP Relay server di port `4040` (`http://127.0.0.1:4040/api/hook`). Server ini menerima payload lifecycle AI coding agent untuk menggerakkan ekspresi dan status Mochi secara live:
+
+```
+┌─────────────────────────────────┐        POST /api/hook        ┌──────────────────────────────────┐
+│  Hermes Agent / Telegram Bot    │ ───────────────────────────> │  Coucou Desktop HUD (Port 4040)  │
+│  (Session, Tool, Stop, Prompt)  │                              │  Mochi Island Expands & Reacts   │
+└─────────────────────────────────┘                              └──────────────────────────────────┘
+```
+
+### Cara Pasang Plugin Hermes Agent:
+1. Salin folder plugin `hermes-plugin/coucou-hud` ke direktori plugin Hermes di komputer kamu:
+   * **Windows**: `%LOCALAPPDATA%\hermes\plugins\coucou-hud`
+   * **Linux/macOS**: `~/.local/share/hermes/plugins/coucou-hud`
+2. Aktifkan plugin pada profil Hermes kamu (`plugins: [coucou-hud]`).
+3. Setiap kali user mengirim prompt di Telegram atau Hermes mengeksekusi tool terminal/browser/file, Mochi di layar desktop kamu otomatis membesar, menampilkan status `thinking` atau `working`, dan merayakan `finished` begitu jawaban terkirim!
+
+Untuk menguji relay secara manual tanpa Hermes:
+```bash
+./scripts/test-hermes-relay.sh
+```
 
 ---
 
@@ -162,16 +189,44 @@ coucou &
 
 ---
 
-## 🪟 Dukungan Windows
+## 🪟 Panduan Instalasi & Menjalankan (Windows)
 
-Source code berbasis **Tauri (Rust + TS)** dan memiliki implementasi Win32 API di dalamnya (`windows/src-tauri/src/platform/windows.rs`).  
-Untuk mengompilasi file `.exe` di Windows:
-1. Buka PowerShell di Windows dengan Node.js dan Rust terinstall.
-2. `cd windows`
-3. `npm install`
-4. `npm run build && npx tauri build`
+Coucou berjalan sebagai aplikasi desktop mandiri native Windows (Tauri 2 + Rust + WebView2).
 
-Binary `.exe` akan tersedia di `target/release/coucou.exe`.
+### 1. Prasyarat
+* **Node.js** (v18+) & **npm**
+* **Rust & Cargo** (Windows MSVC toolchain):
+  ```powershell
+  # Download dan install rustup jika belum ada:
+  # https://rustup.rs/
+  ```
+
+### 2. Build Mandiri (Standalone No-Bundle)
+Buka terminal (PowerShell atau Git Bash) di folder proyek:
+
+```bash
+cd windows
+
+# 1. Pasang dependensi frontend
+npm install
+
+# 2. Build frontend & compile Tauri binary
+npm run build
+npx tauri build --no-bundle
+```
+
+Binary `.exe` siap pakai akan dihasilkan di:  
+`windows/target/release/coucou.exe`
+
+> ⚠️ **Catatan Penting Build**:  
+> Selalu gunakan `npx tauri build --no-bundle` (bukan hanya `cargo build`). Ini memastikan seluruh file web frontend (`dist/`) otomatis di-*embed* langsung ke dalam executable sehingga Coucou berjalan mandiri tanpa memerlukan dev server localhost aktif.
+
+### 3. Menjalankan di Windows
+Cukup jalankan file binary:
+```bash
+./target/release/coucou.exe
+```
+Coucou akan muncul sebagai Dynamic Island melayang di bagian atas layar monitor utama kamu, dan tray icon akan aktif di taskbar.
 
 ---
 
